@@ -2,11 +2,8 @@
 
 buildscript {
 
-    val targetAndroidSdk by extra(34)
-    val minAndroidSdk by extra(24)
-
-    val javaVersion by extra(JavaVersion.VERSION_17)
-    val kotlinVersion by extra("17")
+    val javaVersion by extra(JavaVersion.VERSION_21)
+    val jvmTarget by extra("21")
 
     dependencies {
         classpath(libs.google.services)

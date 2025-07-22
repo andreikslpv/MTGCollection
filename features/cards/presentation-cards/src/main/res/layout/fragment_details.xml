@@ -31,7 +31,7 @@
             <ImageView
                 android:id="@+id/detailsPoster"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/height_of_poster"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginVertical="@dimen/margin_small_8"
                 android:background="@color/background_main"

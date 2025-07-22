@@ -17,14 +17,14 @@ android {
         }
     }
     namespace = "com.andreikslpv.mtgcollection"
-    compileSdk = rootProject.extra["targetAndroidSdk"] as Int
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.andreikslpv.mtgcollection"
-        minSdk = rootProject.extra["minAndroidSdk"] as Int
-        targetSdk = rootProject.extra["targetAndroidSdk"] as Int
-        versionCode = 7
-        versionName = "1.1.0"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        versionCode = 11
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +44,7 @@ android {
         targetCompatibility = rootProject.extra["javaVersion"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["kotlinVersion"] as String
+        jvmTarget = rootProject.extra["jvmTarget"] as String
     }
 }
 

@@ -2,7 +2,6 @@ package com.andreikslpv.presentation_cards
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.andreikslpv.common.Core
 import com.andreikslpv.common.Response
 import com.andreikslpv.domain.entities.CardUiEntity
+import com.andreikslpv.presentation.BaseFragment
 import com.andreikslpv.presentation.BaseLoadStateAdapter
 import com.andreikslpv.presentation.BaseScreen
 import com.andreikslpv.presentation.args
@@ -18,7 +18,6 @@ import com.andreikslpv.presentation.observeStateOn
 import com.andreikslpv.presentation.recyclers.CardItemClickListener
 import com.andreikslpv.presentation.recyclers.itemDecoration.SpaceItemDecoration
 import com.andreikslpv.presentation.simpleScan
-import com.andreikslpv.presentation.viewBinding
 import com.andreikslpv.presentation.viewModelCreator
 import com.andreikslpv.presentation.visible
 import com.andreikslpv.presentation_cards.databinding.FragmentCardsBinding
@@ -30,7 +29,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CardsFragment : Fragment(R.layout.fragment_cards) {
+class CardsFragment : BaseFragment<FragmentCardsBinding>(FragmentCardsBinding::inflate) {
 
     class Screen(
         val setCode: String,
@@ -40,8 +39,6 @@ class CardsFragment : Fragment(R.layout.fragment_cards) {
     @Inject
     lateinit var factory: CardsViewModel.Factory
     private val viewModel by viewModelCreator { factory.create(args()) }
-
-    private val binding by viewBinding<FragmentCardsBinding>()
 
     private lateinit var cardAdapter: CardPagingAdapter
 

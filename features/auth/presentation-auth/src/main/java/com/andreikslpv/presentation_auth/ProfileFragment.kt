@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,9 +19,9 @@ import coil.load
 import com.andreikslpv.common.Response
 import com.andreikslpv.domain.entities.CardUiEntity
 import com.andreikslpv.domain.usecase.GetCollectionUseCase
+import com.andreikslpv.presentation.BaseFragment
 import com.andreikslpv.presentation.recyclers.CardItemClickListener
 import com.andreikslpv.presentation.recyclers.itemDecoration.SpaceItemDecoration
-import com.andreikslpv.presentation.viewBinding
 import com.andreikslpv.presentation.visible
 import com.andreikslpv.presentation_auth.databinding.FragmentProfileBinding
 import com.andreikslpv.presentation_auth.recyclers.CardHistoryRecyclerAdapter
@@ -37,11 +36,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment(R.layout.fragment_profile) {
+class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
     private val viewModel by viewModels<ProfileViewModel>()
-
-    private val binding by viewBinding<FragmentProfileBinding>()
 
     private lateinit var cardHistoryAdapter: CardHistoryRecyclerAdapter
 
@@ -65,7 +62,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                             }
                         }
                     }
-                } catch (e: ApiException) {
+                } catch (_: ApiException) {
                     //crashlytics.recordException(e)
                 }
             }

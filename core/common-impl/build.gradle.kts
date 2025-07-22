@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.andreikslpv.common_impl"
-    compileSdk = rootProject.extra["targetAndroidSdk"] as Int
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = rootProject.extra["minAndroidSdk"] as Int
+        minSdk = libs.versions.android.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,7 +27,7 @@ android {
         targetCompatibility = rootProject.extra["javaVersion"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["kotlinVersion"] as String
+        jvmTarget = rootProject.extra["jvmTarget"] as String
     }
 }
 

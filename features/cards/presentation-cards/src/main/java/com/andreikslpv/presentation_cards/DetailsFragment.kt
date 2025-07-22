@@ -3,29 +3,27 @@ package com.andreikslpv.presentation_cards
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.andreikslpv.domain.entities.AvailableCardEntity
 import com.andreikslpv.domain.entities.CardLanguage
 import com.andreikslpv.domain.entities.CardUiEntity
 import com.andreikslpv.domain_cards.entities.CardCondition
+import com.andreikslpv.presentation.BaseFragment
 import com.andreikslpv.presentation.BaseScreen
 import com.andreikslpv.presentation.args
 import com.andreikslpv.presentation.makeToast
 import com.andreikslpv.presentation.recyclers.itemDecoration.SpaceItemDecoration
-import com.andreikslpv.presentation.viewBinding
 import com.andreikslpv.presentation.viewModelCreator
 import com.andreikslpv.presentation.visible
 import com.andreikslpv.presentation_cards.databinding.FragmentDetailsBinding
 import com.andreikslpv.presentation_cards.recyclers.AvailableItemClickListener
 import com.andreikslpv.presentation_cards.recyclers.AvailableRecyclerAdapter
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment(R.layout.fragment_details) {
+class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::inflate) {
 
     class Screen(
         val card: CardUiEntity,
@@ -34,8 +32,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     @Inject
     lateinit var factory: DetailsViewModel.Factory
     private val viewModel by viewModelCreator { factory.create(args()) }
-
-    private val binding by viewBinding<FragmentDetailsBinding>()
 
     private val dialogAnimDuration = 500L
     private val dialogAnimAlfa = 1f
@@ -173,17 +169,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             dialogTitle.text = getString(R.string.available_dialog_title_edit)
             actionButton.text = getString(R.string.available_dialog_action_edit)
             // устанавливаем начальные значения
-            (languageText as? MaterialAutoCompleteTextView)?.setText(
+            languageText.setText(
                 availableItem.language,
                 false
             )
             languageField.isEnabled = false
-            (conditionText as? MaterialAutoCompleteTextView)?.setText(
+            conditionText.setText(
                 availableItem.condition,
                 false
             )
             conditionField.isEnabled = false
-            (foilText as? MaterialAutoCompleteTextView)?.setText(
+            foilText.setText(
                 if (availableItem.foiled) getString(R.string.foil_yes) else getString(R.string.foil_no),
                 false
             )
@@ -218,17 +214,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             actionButton.text = getString(R.string.available_dialog_action_add)
 
             // устанавливаем начальные значения
-            (languageText as? MaterialAutoCompleteTextView)?.setText(
+            languageText.setText(
                 CardLanguage.NONE.cardLang,
                 false
             )
             languageField.isEnabled = true
-            (conditionText as? MaterialAutoCompleteTextView)?.setText(
+            conditionText.setText(
                 CardCondition.NONE.fullName,
                 false
             )
             conditionField.isEnabled = true
-            (foilText as? MaterialAutoCompleteTextView)?.setText(
+            foilText.setText(
                 getString(R.string.foil_no),
                 false
             )
@@ -276,7 +272,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun getCount(text: String): Int {
         return try {
             text.toInt()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             0
         }
     }

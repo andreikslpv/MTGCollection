@@ -2,13 +2,17 @@ package com.andreikslpv.navigation.presentation
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.andreikslpv.common.Core
 import com.andreikslpv.common.Response
 import com.andreikslpv.common_impl.ActivityRequired
@@ -66,7 +70,23 @@ class MainActivity : AppCompatActivity(), RouterHolder {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Включаем edge-to-edge (контент заходит под system bars)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Получаем контроллер системных баров
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+
+        // Настраиваем иконки статус-бара (светлая или тёмная тема)
+        controller.isAppearanceLightStatusBars = true
+        controller.isAppearanceLightNavigationBars = true
+
+        // Прозрачный фон системных баров (без использования deprecated API)
+        window.setBackgroundDrawable(null) // опционально, чтобы убрать фон
+
         setContentView(binding.root)
+
+        enableEdgeToEdge()
 
         getPermissionAndSetNotification()
         if (savedInstanceState != null) {

@@ -6,20 +6,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.andreikslpv.common.Core
-import com.andreikslpv.presentation.viewBinding
+import com.andreikslpv.presentation.BaseFragment
 import com.andreikslpv.presentation_auth.databinding.FragmentSignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
-class SignInFragment : Fragment(R.layout.fragment_sign_in) {
-
-    private val binding by viewBinding<FragmentSignInBinding>()
+class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding::inflate) {
 
     private val viewModel by viewModels<SignInViewModel>()
 
@@ -56,7 +54,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.anonymousButton.setOnClickListener { viewModel.signInAnonymously() }
         binding.authCopyrightText.setOnClickListener {
             if (viewModel.privacyPolicyUrl.isNotBlank()) {
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse(viewModel.privacyPolicyUrl))
+                val i = Intent(Intent.ACTION_VIEW, viewModel.privacyPolicyUrl.toUri())
                 startActivity(i)
             }
         }
