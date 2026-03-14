@@ -1,8 +1,6 @@
 package com.andreikslpv.navigation.presentation
 
 import android.Manifest
-import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
@@ -147,7 +145,7 @@ class MainActivity : AppCompatActivity(), RouterHolder {
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
-            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
         }
         return super.dispatchTouchEvent(ev)

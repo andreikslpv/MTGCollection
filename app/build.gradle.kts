@@ -23,8 +23,8 @@ android {
         applicationId = "com.andreikslpv.mtgcollection"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 11
-        versionName = "1.1.1"
+        versionCode = 12
+        versionName = "1.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
