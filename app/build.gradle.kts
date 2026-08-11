@@ -23,8 +23,8 @@ android {
         applicationId = "com.andreikslpv.mtgcollection"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 12
-        versionName = "1.1.2"
+        versionCode = 13
+        versionName = "1.1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.paging.runtime.ktx)
+
+    implementation(libs.coil.core)
+    implementation(libs.okhttp.logging.interceptor)
 
     implementation(libs.google.play.services.auth)
 

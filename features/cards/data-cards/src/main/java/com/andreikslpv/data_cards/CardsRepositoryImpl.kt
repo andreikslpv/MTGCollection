@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Locale
 import javax.inject.Inject
 
@@ -71,24 +72,47 @@ class CardsRepositoryImpl @Inject constructor(
         .flow
         .flowOn(Dispatchers.IO)
 
+    private companion object {
+        private const val WRITE_TIMEOUT_MS = 30_000L
+        private const val WRITE_ATTEMPTS = 3
+    }
+
     override suspend fun addToCardsCollection(uid: String, card: CardEntity): Unit =
         withContext(Dispatchers.IO) {
-            database.collection(FirestoreConstants.PATH_CARDS)
+            val ref = database.collection(FirestoreConstants.PATH_CARDS)
                 .document(uid)
                 .collection(FirestoreConstants.PATH_COLLECTION)
                 .document(card.id)
-                .set(CardFirebaseEntity(card))
-                .await()
+            for (attempt in 1..WRITE_ATTEMPTS) {
+                try {
+                    val done = withTimeoutOrNull(WRITE_TIMEOUT_MS) {
+                        ref.set(CardFirebaseEntity(card)).await()
+                        true
+                    }
+                    if (done == true) return@withContext
+                } catch (e: Exception) {
+                    // retry on transient failure
+                }
+            }
         }
 
     override suspend fun removeFromCardsCollection(uid: String, card: CardEntity): Unit =
         withContext(Dispatchers.IO) {
-            database.collection(FirestoreConstants.PATH_CARDS)
+            val ref = database.collection(FirestoreConstants.PATH_CARDS)
                 .document(uid)
                 .collection(FirestoreConstants.PATH_COLLECTION)
                 .document(card.id)
-                .delete()
-                .await()
+            for (attempt in 1..WRITE_ATTEMPTS) {
+                try {
+                    val done = withTimeoutOrNull(WRITE_TIMEOUT_MS) {
+                        ref.delete().await()
+                        true
+                    }
+                    if (done == true) return@withContext
+                } catch (e: Exception) {
+                    // keep the local state, a later observer will re-sync
+                }
+            }
         }
 
     override fun getCardFromCollection(uid: String, cardId: String): Flow<CardEntity> =
@@ -110,11 +134,20 @@ class CardsRepositoryImpl @Inject constructor(
         }
             .flowOn(Dispatchers.IO)
 
-    // TODO переписать с использованием команды сервера
     override suspend fun removeAllFromCollection(uid: String): Unit = withContext(Dispatchers.IO) {
-        database.collection(FirestoreConstants.PATH_CARDS)
-            .document(uid)
-            .delete()
-            .addOnFailureListener { }
+        for (attempt in 1..WRITE_ATTEMPTS) {
+            try {
+                val done = withTimeoutOrNull(WRITE_TIMEOUT_MS) {
+                    database.collection(FirestoreConstants.PATH_CARDS)
+                        .document(uid)
+                        .delete()
+                        .await()
+                    true
+                }
+                if (done == true) return@withContext
+            } catch (e: Exception) {
+                // retry on transient failure
+            }
+        }
     }
 }

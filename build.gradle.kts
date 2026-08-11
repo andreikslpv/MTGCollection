@@ -2,8 +2,8 @@
 
 buildscript {
 
-    val javaVersion by extra(JavaVersion.VERSION_21)
-    val jvmTarget by extra("21")
+    val javaVersion by extra(JavaVersion.VERSION_17)
+    val jvmTarget by extra("17")
 
     dependencies {
         classpath(libs.google.services)
